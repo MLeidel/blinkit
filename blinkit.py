@@ -20,9 +20,10 @@ Timezones:
 5 US/Hawaii
 
 command takes 2 arguments - Example:
-  python blinkit.py Documents/BlinkStuff 2
-blink folder is in Documents/BlinkStuff
-timezone is Mountain (nbr 2)
+    python blinkit.py Documents/BlinkStuff 2
+explanation:
+    blink folder is in Documents/BlinkStuff
+    timezone is Mountain (nbr 2)
 
 Note:
     Not all countries observe Daylight Saving time
@@ -65,6 +66,7 @@ class Application(Frame):
         self.columnconfigure(1, weight=1)
 
         self.lst.bind("<<ListboxSelect>>", self.on_select_list)
+        self.lst.bind("<Double-Button-1>", self.on_double_select_list)
 
         listOfVideos = []
         def get_directory_contents(path):
@@ -102,7 +104,7 @@ class Application(Frame):
         ''' launch in player if "Video" '''
         subprocess.Popen(["smplayer", "-minigui", self.video])
 
-    def on_select_list(self, event):
+    def on_select_list(self, e=None):
         list_item = self.lst.curselection()
         fp = self.lst.get(list_item[0])
         self.video = str(fp)  # for use in btnplay_clicked
@@ -110,6 +112,9 @@ class Application(Frame):
         actDateTime = getRealDateTime(self.video)
         self.dateTimeLabel.config(text=actDateTime)
 
+    def on_double_select_list(self, e=None):
+        self.on_select_list()
+        self.btnplay_clicked()
 #
 #   Functions to get the ACTUAL date-time of the video
 #
